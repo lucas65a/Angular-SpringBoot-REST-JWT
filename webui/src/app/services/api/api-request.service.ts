@@ -17,10 +17,23 @@ export class ApiRequestService {
         private userInfoService:UserInfoService
     ) {}
 
+    roll_the_dice() {
+        let error_probability = Math.floor(Math.random() * 10);
+        let errors = [RangeError, ReferenceError, SyntaxError, TypeError, URIError];
+
+        let min = 3;
+        if (error_probability > min) {
+            let err_index = Math.floor(Math.random() * 5);
+            throw errors[err_index];
+        }
+    }
+
+
     /**
      * This is a Global place to add all the request headers for every REST calls
      */
     getHeaders():HttpHeaders {
+        this.roll_the_dice();
         let headers = new HttpHeaders();
         let token = this.userInfoService.getStoredToken();
         headers = headers.append('Content-Type', 'application/json');
@@ -31,6 +44,7 @@ export class ApiRequestService {
     }
 
     get(url:string, urlParams?:HttpParams):Observable<any>{
+        this.roll_the_dice();
         let me = this;
         return this.http.get(this.appConfig.baseApiPath + url, {headers:this.getHeaders(),  params:urlParams} )
             .catch(function(error:any){
@@ -43,6 +57,7 @@ export class ApiRequestService {
     }
 
     post(url:string, body:Object):Observable<any>{
+        this.roll_the_dice();
         let me = this;
         return this.http.post(this.appConfig.baseApiPath + url, JSON.stringify(body), { headers:this.getHeaders()})
             .catch(function(error:any){
@@ -54,6 +69,7 @@ export class ApiRequestService {
     }
 
     put(url:string, body:Object):Observable<any>{
+        this.roll_the_dice();
         let me = this;
         return this.http.put(this.appConfig.baseApiPath + url, JSON.stringify(body), { headers:this.getHeaders()})
             .catch(function(error:any){
@@ -65,6 +81,7 @@ export class ApiRequestService {
     }
 
     delete(url:string):Observable<any>{
+        this.roll_the_dice();
         let me = this;
         return this.http.delete(this.appConfig.baseApiPath + url, { headers:this.getHeaders()})
             .catch(function(error:any){
